@@ -1,17 +1,5 @@
-let addToy = false;
-
-document.addEventListener("DOMContentLoaded", () => {
-  const addBtn = document.querySelector("#new-toy-btn");
-  const toyFormContainer = document.querySelector(".container");
-  addBtn.addEventListener("click", () => {
-    // hide & seek with the form
-    addToy = !addToy;
-    if (addToy) {
-      toyFormContainer.style.display = "block";
-    } else {
-      toyFormContainer.style.display = "none";
-    }
-  });
+//document.addEventListener(DOMContentLoaded, ()=>{ 
+    //don't think I need this bc the index.js file is linked at the bottom of the HTML doc
 
 let form = document.querySelector(".add-toy-form")
     form.addEventListener('submit', (e)=> {
@@ -44,5 +32,4 @@ const addToy4 = function(){
         })
 }  
 
-
-});
+//})
