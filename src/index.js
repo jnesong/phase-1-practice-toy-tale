@@ -15,17 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
 //your code here
 
-  // let form = document.querySelector(".add-toy-form")
-  //   form.addEventListener("submit", (e) => {
-  //      e.preventDefault()
-  //      let newToyName = form.querySelector(".input-text").value
-  //     console.log(newToyName)
-  //     postNewToy(newToyName)
-  //     form.reset()
-  //   })//end of form eventListener 
-
-  let arrayToys = []//creating an empty array to fill with json data
-
   const getTheToys = function(){
       fetch("http://localhost:3000/toys")
       .then ((resp) => resp.json())
@@ -57,28 +46,55 @@ document.addEventListener("DOMContentLoaded", () => {
           //append to toy collection
           toyCard.append(toyHeader, toyImage, toyLikes, toyButton,)
           toyCollection.append(toyCard)
-          
+  
         }// end of makeToyCard function
+
 
         arrayToys.forEach(makeToyCard);
 
       
+      
       })//end of second .then()
 
-    }//end of postTheToys function
-  
+    }//end of getTheToys function
+
     getTheToys()
 
-  // const postNewToy = function (newToyName) {
-  //   fetch ("http://localhost:3000/toys"), {
-  //     method: "POST", 
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },//end of headers
-  //     body:JSON.stringify(newtoyName)
-  //   }//end of fetch second argument
-  //   .then(res => res.json())
-  //   .then(animal => console.log(toy))
-  // }//end of postNewToy function
+    let form = document.querySelector(".add-toy-form")
+    form.addEventListener("submit", (e) => {
+       e.preventDefault()
+       let newToyName = form.querySelector(".input-text").value
+       let newToyImageSrc = form.querySelector(".input-text2").value
+      console.log(newToyName)
+      console.log(newToyImageSrc)
+
+      const makeNewToyCard = function(para1, para2){ // don't forget to put toy/item as a parameter!
+        let toyCard = document.createElement("div")
+        toyCard.className = "card"
+        let toyCollection = document.querySelector("#toy-collection")
+        let toyHeader = document.createElement("h2")
+        toyHeader.textContent = para1
+        let toyImage = document.createElement("img")
+        toyImage.src = para2
+        toyImage.className = "toy-avatar"
+        let toyLikes = document.createElement("p")
+        let likeNum = 0
+        toyLikes.textContent = likeNum + " Likes" //don't forget .textContent here
+        let toyButton = document.createElement("button")
+        toyButton.textContent = "Like <3"
+        toyButton.className = "like-btn"
+        toyButton.addEventListener("click", ()=>{
+          toyLikes.textContent = ++likeNum + " likes"
+        })//end of toyButton event listener
+
+        //append to toy collection
+        toyCard.append(toyHeader, toyImage, toyLikes, toyButton,)
+        toyCollection.append(toyCard)
+
+      }// end of makeNewToyCard function
+      makeNewToyCard(newToyName, newToyImageSrc)
+      form.reset()
+    })//end of form eventListener 
+
 
 });// this is the end curly brace of the DOMContentLoaded event listener

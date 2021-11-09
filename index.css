@@ -89,7 +89,7 @@ button:hover {
 }
 
 
-.input-text {
+.input-text, .input-text2 {
   border-radius: 5px;
   height: 2rem;
   width: 60%;
