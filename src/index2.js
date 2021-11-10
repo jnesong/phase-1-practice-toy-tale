@@ -36,7 +36,7 @@ const getToys = ()=> {
             let toyButton = document.createElement("button")
             toyButton.textContent = "Like <3"
             toyButton.id = toy["id"]
-            toyButton.className= ".like-btn"
+            toyButton.className= "like-btn"
             toyButton.addEventListener("click", ()=>{
                 toyLikeNum.textContent = ++toy["likes"] + "  Likes"
             })
@@ -80,7 +80,7 @@ const addNewToy = ()=> {
         toyLikeNum.textContent = startToyNum + "  Likes"
         let toyButton = document.createElement("button")
         toyButton.textContent = "Like <3"
-        toyButton.className= ".like-btn"
+        toyButton.className= "like-btn"
         toyButton.addEventListener("click", ()=>{
             toyLikeNum.textContent = ++startToyNum + "  Likes"
         })
