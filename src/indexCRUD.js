@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // your code here
 
   //this is the GET
-
   const divToyCollection = document.querySelector("#toy-collection")
 
   function fetchToys() {
@@ -35,6 +34,23 @@ document.addEventListener("DOMContentLoaded", () => {
           const toyImage = document.createElement("img")
           toyImage.src = eachToy.image
           toyImage.className = "toy-avatar"
+          const donateToy = document.createElement("button")
+          donateToy.textContent = "Donate </3"
+          donateToy.addEventListener("click", ()=>{
+            toyCard.remove()
+            deleteToy(eachToy.id)
+            function deleteToy (idParam) {
+              fetch(`http://localhost:3000/toys/${idParam}`,{
+              method:"DELETE",
+              headers:{
+                "Content-Type":"application/json"
+              }
+              })//end of fetch in deleteToy
+              .then (resp => resp.json())
+              .then (dataToy => console.log(dataToy))
+            }//end of deleteToy function
+          })//end of donate event listener
+
           const toyLikeCount = document.createElement("p")
           toyLikeCount.textContent = eachToy.likes + "  Likes"
           const likeButton = document.createElement("button")
@@ -43,8 +59,25 @@ document.addEventListener("DOMContentLoaded", () => {
           likeButton.id = eachToy.id
           likeButton.addEventListener("click", () => {
             toyLikeCount.textContent = ++eachToy.likes + "  Likes"
-          })
-          toyCard.append(h2ToyName, toyImage, toyLikeCount, likeButton)
+            updateLikes(eachToy.id)
+            function updateLikes(paramId) {
+              fetch(`http://localhost:3000/toys/${paramId}`, {
+                method: "PATCH",
+                headers: {
+                  "Content-Type": "application/json",
+                  Accept: "application/json",
+                },
+                body: JSON.stringify({"likes": eachToy.likes})
+              }) //end of fetch PATCH
+                  .then(resp => resp.json())
+                  .then(oneToyData => console.log(oneToyData))
+              }// end of function updateLikes
+          })//end of like Button event listener
+
+
+
+
+          toyCard.append(h2ToyName, toyImage, toyLikeCount, likeButton, donateToy)
           divToyCollection.append(toyCard)
 
         }//end of makeToyCard function
@@ -54,9 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } //end of fetchToys function
   fetchToys()// this puts ORGINAL CARDS ON PAGE LOAD
 
-  //BELOW IS CRUD
-
-
+  //this is the POST
   function addNewToy() {
     const form = document.querySelector(".add-toy-form")
     form.addEventListener("submit", (e) => {
@@ -64,8 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
       let newToyName = e.target.name.value
       let newToyURL = e.target.image.value
       console.log(newToyName, newToyURL)
-
-      //POST starts here
 
       let countStart = "0";
 
@@ -85,18 +114,16 @@ document.addEventListener("DOMContentLoaded", () => {
       }// end of configToys variable
       fetch("http://localhost:3000/toys", configToys)
         .then(response => response.json())
-        .then(newData => console.log(newData))
-
-      makeNewToyCard(newToyName, newToyURL, countStart)
+        .then(toyData => {
+          console.log(toyData.id)
+          makeNewToyCard(newToyName, newToyURL, countStart, toyData.id)
+        })
       e.target.reset()
     }) //end of form eventListener
-
-
-
   }//end of addNewToy form
-  addNewToy()
+  addNewToy() //end of POST/form
 
-  function makeNewToyCard(nameParam, imageParam, likesParam) {
+  function makeNewToyCard(nameParam, imageParam, likesParam, idParam) {
     const toyCard = document.createElement("div")
     toyCard.className = "card"
     const h2ToyName = document.createElement("h2")
@@ -109,12 +136,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const likeButton = document.createElement("button")
     likeButton.className = "like-btn"
     likeButton.textContent = "Like <3"
+    likeButton.id = idParam
     likeButton.addEventListener("click", () => {
       toyLikeCount.textContent = ++likesParam + "  Likes"
     })// end of button eventListener
+
+    //append to toyCard
     toyCard.append(h2ToyName, toyImage, toyLikeCount, likeButton)
     divToyCollection.append(toyCard)
   }// end of makeNewToyCard
+
 
 
 
